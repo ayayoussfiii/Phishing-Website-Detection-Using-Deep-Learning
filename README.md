@@ -54,15 +54,14 @@ BiLSTM (128 units) ──► Self-Attention ──► GlobalMaxPool ──► De
 
 ---
 
-## Résultats attendus
-
-| Modèle | Accuracy | AUC-ROC |
-|--------|----------|---------|
+## Expected Results
+| Model | Accuracy | AUC-ROC |
+|-------|----------|---------|
 | Features only | ~93% | ~0.97 |
 | LSTM only | ~96% | ~0.99 |
-| **Hybrid (notre)** | **~98%** | **~0.997** |
-
+| **Hybrid (ours)** | **~98%** | **~0.997** |
 ---
+
 
 ## Installation
 
