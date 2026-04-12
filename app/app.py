@@ -5,7 +5,7 @@ Interface de démonstration Gradio pour la détection de phishing en temps réel
 
 Usage:
     python app/app.py
-    → Ouvre http://localhost:7860
+    → Ouvre http://localhost:7860 sur le localhost
 """
 
 import sys
