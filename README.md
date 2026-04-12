@@ -22,15 +22,13 @@ Hybrid phishing detection system combining:
 - **18 structural features** → Dense Neural Network
 - **Fusion layer** → robust final decision
 - **Gradio interface** → real-time demonstration
-
-### Pourquoi hybride ?
-
-| Approche | Avantage | Limite |
-|----------|----------|--------|
-| LSTM seul | Apprend les patterns textuels | Ignore les méta-données |
-| Features seules | Rapide, interprétable | Perd l'info séquentielle |
-| **Hybride (notre approche)** | **Les deux** | **Aucune** |
-
+  
+### Why hybrid?
+| Approach | Advantage | Limitation |
+|----------|-----------|------------|
+| LSTM only | Learns textual patterns | Ignores metadata |
+| Features only | Fast, interpretable | Loses sequential info |
+| **Hybrid (our approach)** | **Best of both** | **None** |
 ---
 
 ## Architecture
