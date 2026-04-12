@@ -1,0 +1,28 @@
+# Environnement
+.venv/
+__pycache__/
+*.pyc
+*.pyo
+.env
+
+# Données (trop lourdes pour GitHub)
+data/raw/
+data/processed/
+
+# Modèles (trop lourds)
+models/
+
+# Rapports générés
+reports/figures/
+reports/tensorboard/
+
+# MLflow
+mlruns/
+
+# Jupyter
+.ipynb_checkpoints/
+notebooks/.ipynb_checkpoints/
+
+# OS
+.DS_Store
+Thumbs.db

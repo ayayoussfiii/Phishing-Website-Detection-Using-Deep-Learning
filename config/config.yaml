@@ -1,0 +1,39 @@
+seed: 42
+
+data:
+  phishtank_url: "http://data.phishtank.com/data/online-valid.csv"
+  alexa_path: "data/raw/top-1m.csv"
+  processed_dir: "data/processed"
+  raw_dir: "data/raw"
+  max_url_len: 200
+  min_samples: 50000        # nb samples à garder par classe
+  test_size: 0.15
+  val_size: 0.15
+
+features:
+  url_features: 18          # nombre de features extraites par URL
+  char_vocab_size: 100      # taille vocab caractères
+  max_seq_len: 200          # longueur max séquence char
+
+training:
+  batch_size: 256
+  epochs: 10
+  learning_rate: 0.001
+  optimizer: adam
+  early_stopping_patience: 5
+  checkpoint_dir: "models"
+  mlflow_experiment: "phishing-hybrid"
+
+models:
+  lstm:
+    embedding_dim: 64
+    lstm_units: 128
+    dropout: 0.3
+
+  features_branch:
+    hidden_units: [128, 64]
+    dropout: 0.3
+
+  hybrid:
+    fusion_units: 128
+    dropout: 0.3
