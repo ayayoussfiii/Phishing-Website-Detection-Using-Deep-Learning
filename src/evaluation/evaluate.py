@@ -1,10 +1,10 @@
 """
 evaluate.py
 -----------
-Évaluation complète : métriques, courbes ROC/PR, matrice de confusion, SHAP.
+Évaluation complète : métriques, courbes ROC/PR, matrice de confusion, SHAP
 
 Usage:
-    python src/evaluation/evaluate.py
+    python src/evaluation/evaluate.py 
 """
 
 import sys
