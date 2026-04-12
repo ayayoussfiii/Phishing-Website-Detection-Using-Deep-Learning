@@ -16,14 +16,12 @@
 
 ---
 
-## Vue d'ensemble
-
-Système hybride de détection de phishing combinant :
-
-- **URLs brutes** → BiLSTM char-level + Self-Attention
-- **18 features structurelles** → Dense Neural Network
-- **Fusion layer** → décision finale robuste
-- **Interface Gradio** → démonstration temps réel
+## Overview
+Hybrid phishing detection system combining:
+- **Raw URLs** → Char-level BiLSTM + Self-Attention
+- **18 structural features** → Dense Neural Network
+- **Fusion layer** → robust final decision
+- **Gradio interface** → real-time demonstration
 
 ### Pourquoi hybride ?
 
