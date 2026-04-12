@@ -230,18 +230,8 @@ phishing-hybrid-dl/
 
 ---
 
-## Équipe
 
-| Nom | Rôle |
-|-----|------|
-| [Votre Nom] | Architecture hybride, pipeline d'entraînement |
-| [Équipier 2] | Feature engineering, évaluation |
-| [Équipier 3] | Interface Gradio, rapport |
-
-**Encadrant** : Pr. Oussama EL GANNOUR — ENSA de Fès
 
 ---
 
-## Licence
 
-MIT — Dataset PhishTank sous licence Creative Commons.
