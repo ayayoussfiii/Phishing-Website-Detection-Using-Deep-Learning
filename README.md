@@ -5,15 +5,14 @@
 
 ---
 
-## 📋 Table des matières
-
-1. [Vue d'ensemble](#vue-densemble)
+##  Table of Contents
+1. [Overview](#overview)
 2. [Architecture](#architecture)
-3. [Résultats attendus](#résultats-attendus)
+3. [Expected Results](#expected-results)
 4. [Installation](#installation)
 5. [Datasets](#datasets)
-6. [Lancer le projet](#lancer-le-projet)
-7. [Structure](#structure)
+6. [Getting Started](#getting-started)
+7. [Project Structure](#project-structure)
 
 ---
 
