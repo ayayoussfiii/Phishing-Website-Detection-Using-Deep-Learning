@@ -114,43 +114,39 @@ Le projet utilise **deux sources** téléchargées automatiquement :
 make all
 ```
 
-### Étape par étape
-
+### Step by step
 ```bash
-# 1. Télécharger et préparer les données
+# 1. Download and prepare the data
 make data
-# ou :
+# or:
 python src/data/make_dataset.py
 
-# 2. Entraîner le modèle hybride
+# 2. Train the hybrid model
 make train
-# ou :
+# or:
 python src/training/train.py --model hybrid
 
-# 3. Entraîner tous les modèles (pour comparaison)
+# 3. Train all models (for comparison)
 make train-all
-# ou :
+# or:
 python src/training/train.py --model all
 
-# 4. Évaluer et générer les figures
+# 4. Evaluate and generate figures
 make evaluate
 
-# 5. Lancer la démo Gradio
+# 5. Launch the Gradio demo
 make app
-# → Ouvre http://localhost:7860
+# → Opens http://localhost:7860
 ```
 
-### Modèles disponibles
-
+### Available models
 ```bash
-python src/training/train.py --model hybrid        # Modèle principal
-python src/training/train.py --model lstm_only     # Ablation LSTM
-python src/training/train.py --model features_only # Ablation features
-python src/training/train.py --model all           # Tous les modèles
+python src/training/train.py --model hybrid        # Main model
+python src/training/train.py --model lstm_only     # LSTM ablation
+python src/training/train.py --model features_only # Features ablation
+python src/training/train.py --model all           # All models
 ```
-
 ---
-
 ## Structure
 
 ```
