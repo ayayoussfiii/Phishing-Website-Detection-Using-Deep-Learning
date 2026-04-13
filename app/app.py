@@ -39,7 +39,7 @@ def predict_url(url: str):
         return _error_html(load_error), None
 
     if not url or len(url.strip()) < 5:
-        return _error_html("Please enter a valid URL."), None
+        return _error_html("ERR :: please enter a valid URL."), None
 
     url = url.strip()
     if not url.startswith(("http://", "https://")):
@@ -51,77 +51,55 @@ def predict_url(url: str):
     pct = int(prob * 100)
 
     if prob < 0.3:
-        label    = "Safe"
-        verdict  = "This URL appears legitimate and trustworthy."
-        accent   = "#16a34a"
-        bg       = "#f0fdf4"
-        border   = "#bbf7d0"
-        icon_svg = (
-            '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" '
-            'stroke="#16a34a" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">'
-            '<path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>'
-            '<polyline points="9 12 11 14 15 10"/></svg>'
-        )
+        status  = "SAFE"
+        verdict = "Target URL is clean. No threat detected."
+        color   = "#00ff41"
+        prefix  = "[OK]"
     elif prob < 0.7:
-        label    = "Suspicious"
-        verdict  = "Proceed with caution — this URL shows unusual patterns."
-        accent   = "#b45309"
-        bg       = "#fffbeb"
-        border   = "#fde68a"
-        icon_svg = (
-            '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" '
-            'stroke="#b45309" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">'
-            '<path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/>'
-            '<line x1="12" y1="9" x2="12" y2="13"/>'
-            '<line x1="12" y1="17" x2="12.01" y2="17"/></svg>'
-        )
+        status  = "SUSPICIOUS"
+        verdict = "Anomalous patterns detected. Proceed with caution."
+        color   = "#ffb700"
+        prefix  = "[!!]"
     else:
-        label    = "Phishing"
-        verdict  = "High risk — this URL is likely malicious. Do not visit."
-        accent   = "#dc2626"
-        bg       = "#fef2f2"
-        border   = "#fecaca"
-        icon_svg = (
-            '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" '
-            'stroke="#dc2626" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">'
-            '<circle cx="12" cy="12" r="10"/>'
-            '<line x1="15" y1="9" x2="9" y2="15"/>'
-            '<line x1="9" y1="9" x2="15" y2="15"/></svg>'
-        )
+        status  = "PHISHING"
+        verdict = "THREAT CONFIRMED. Do not visit this URL."
+        color   = "#ff3131"
+        prefix  = "[XX]"
+
+    bar_filled = int(pct / 5)
+    bar_empty  = 20 - bar_filled
+    bar        = "█" * bar_filled + "░" * bar_empty
 
     result_html = f"""
-<div style="font-family:'Inter',system-ui,sans-serif; padding:2px;">
-
-  <div style="
-    display:flex; align-items:center; gap:10px;
-    background:{bg}; border:1px solid {border};
-    border-radius:10px; padding:14px 18px; margin-bottom:14px;
-  ">
-    {icon_svg}
-    <span style="font-size:15px; font-weight:600; color:{accent};">{label}</span>
-    <span style="
-      margin-left:auto; font-size:12px; font-weight:600;
-      color:{accent}; background:white; border:1px solid {border};
-      border-radius:20px; padding:3px 10px;
-    ">{pct}%</span>
+<div style="
+  font-family:'Courier New',Courier,monospace;
+  background:#0a0a0a;
+  border:1px solid #1a1a1a;
+  border-left:3px solid {color};
+  border-radius:4px;
+  padding:20px 22px;
+  color:#00ff41;
+  font-size:13px;
+  line-height:1.8;
+">
+  <div style="color:#333; margin-bottom:14px; font-size:11px; letter-spacing:0.08em;">
+    ┌─ PHISHGUARD SCAN RESULT ────────────────────────────────
   </div>
-
-  <div style="
-    background:#f8f9fa; border:1px solid #e9ecef; border-radius:8px;
-    padding:9px 13px; margin-bottom:12px;
-    font-family:'JetBrains Mono','Fira Code',monospace;
-    font-size:12px; color:#495057; word-break:break-all;
-  ">{url}</div>
-
-  <div style="background:#e9ecef; border-radius:99px; height:5px; overflow:hidden; margin-bottom:12px;">
-    <div style="
-      width:{pct}%; height:100%; background:{accent};
-      border-radius:99px;
-    "></div>
+  <div style="margin-bottom:10px;">
+    <span style="color:#2a5c2a;">STATUS  </span>
+    <span style="color:{color}; letter-spacing:0.12em;">{prefix} {status}</span>
   </div>
-
-  <p style="margin:0; font-size:13px; color:#6c757d; line-height:1.6;">{verdict}</p>
-
+  <div style="margin-bottom:10px;">
+    <span style="color:#2a5c2a;">RISK    </span>
+    <span style="color:{color};">{bar}  {pct}%</span>
+  </div>
+  <div style="margin-bottom:14px; word-break:break-all;">
+    <span style="color:#2a5c2a;">TARGET  </span>
+    <span style="color:#555;">{url}</span>
+  </div>
+  <div style="border-top:1px solid #1a1a1a; padding-top:12px; color:#3a7a3a; font-size:11px;">
+    &gt; {verdict}
+  </div>
 </div>
 """
 
@@ -137,146 +115,143 @@ def predict_url(url: str):
 def _error_html(msg: str) -> str:
     return f"""
 <div style="
-  font-family:'Inter',system-ui,sans-serif;
-  background:#fef2f2; border:1px solid #fecaca;
-  border-radius:10px; padding:14px 18px;
-  font-size:13px; color:#dc2626;
-">{msg}</div>"""
+  font-family:'Courier New',Courier,monospace;
+  background:#0a0a0a;
+  border:1px solid #1a1a1a;
+  border-left:3px solid #ff3131;
+  border-radius:4px;
+  padding:16px 22px;
+  color:#ff3131;
+  font-size:13px;
+">[ERR] {msg}</div>"""
 
 
 # ── CSS ────────────────────────────────────────────────────────────────────────
 
 CSS = """
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Share+Tech+Mono&display=swap');
 
 *, *::before, *::after { box-sizing: border-box; }
 
 body, .gradio-container {
-    background: #ffffff !important;
-    font-family: 'Inter', system-ui, sans-serif !important;
-    color: #1a1a1a !important;
+    background: #080808 !important;
+    font-family: 'Share Tech Mono', 'Courier New', monospace !important;
+    color: #00ff41 !important;
 }
 
-/* Remove default Gradio chrome */
 footer { display: none !important; }
-.gr-block.gr-box, .gr-form { box-shadow: none !important; }
 
 /* ── Header ── */
 .ph-header {
-    padding: 36px 0 28px;
+    padding: 36px 0 30px;
     text-align: center;
-    border-bottom: 1px solid #f0f0f0;
-    margin-bottom: 28px;
+    border-bottom: 1px solid #111;
+    margin-bottom: 0;
 }
-.ph-tag {
-    display: inline-block;
+.ph-prompt {
     font-size: 11px;
-    font-weight: 500;
-    letter-spacing: 0.08em;
-    color: #6c757d;
-    background: #f5f5f5;
-    border: 1px solid #e8e8e8;
-    border-radius: 4px;
-    padding: 3px 10px;
-    margin-bottom: 14px;
-    text-transform: uppercase;
+    color: #2a5c2a;
+    letter-spacing: 0.1em;
+    margin-bottom: 16px;
 }
 .ph-title {
-    font-size: 26px;
-    font-weight: 600;
-    color: #111;
-    margin: 0 0 6px;
-    letter-spacing: -0.4px;
+    font-size: 28px;
+    font-weight: 400;
+    color: #00ff41;
+    margin: 0 0 8px;
+    letter-spacing: 0.08em;
+    text-shadow: 0 0 20px rgba(0,255,65,0.2);
 }
 .ph-sub {
-    font-size: 13px;
-    color: #999;
+    font-size: 11px;
+    color: #1e4d1e;
+    letter-spacing: 0.12em;
     margin: 0;
-    font-family: 'JetBrains Mono', monospace;
 }
 
 /* ── Stats ── */
 .ph-stats {
     display: flex;
     justify-content: center;
-    gap: 0;
-    border-top: 1px solid #f0f0f0;
-    border-bottom: 1px solid #f0f0f0;
+    border-bottom: 1px solid #111;
+    background: #080808;
     margin-bottom: 32px;
-    background: #fafafa;
 }
 .ph-stat {
-    padding: 16px 36px;
+    padding: 14px 40px;
     text-align: center;
-    border-right: 1px solid #f0f0f0;
+    border-right: 1px solid #111;
 }
 .ph-stat:last-child { border-right: none; }
 .ph-stat-val {
     display: block;
-    font-size: 20px;
-    font-weight: 600;
-    color: #111;
-    line-height: 1.2;
+    font-size: 18px;
+    color: #00ff41;
+    text-shadow: 0 0 10px rgba(0,255,65,0.25);
 }
 .ph-stat-lbl {
     display: block;
-    font-size: 11px;
-    color: #aaa;
-    letter-spacing: 0.06em;
+    font-size: 10px;
+    color: #1e4d1e;
+    letter-spacing: 0.1em;
     text-transform: uppercase;
-    margin-top: 3px;
+    margin-top: 2px;
 }
 
 /* ── Section labels ── */
 .section-label {
-    font-size: 11px;
-    font-weight: 600;
-    letter-spacing: 0.08em;
+    font-size: 10px;
+    letter-spacing: 0.14em;
     text-transform: uppercase;
-    color: #aaa;
-    margin-bottom: 10px;
+    color: #1e4d1e;
+    margin-bottom: 8px;
     display: block;
 }
 
 /* ── Input ── */
 #url-box textarea, #url-box input {
-    font-family: 'JetBrains Mono', monospace !important;
+    font-family: 'Share Tech Mono', 'Courier New', monospace !important;
     font-size: 13px !important;
-    background: #fff !important;
-    border: 1px solid #e0e0e0 !important;
-    border-radius: 8px !important;
-    color: #111 !important;
-    padding: 11px 14px !important;
+    background: #0d0d0d !important;
+    border: 1px solid #1c1c1c !important;
+    border-radius: 4px !important;
+    color: #00ff41 !important;
+    padding: 12px 14px !important;
+    caret-color: #00ff41 !important;
     transition: border-color 0.15s, box-shadow 0.15s;
 }
 #url-box textarea:focus, #url-box input:focus {
-    border-color: #111 !important;
-    box-shadow: 0 0 0 3px rgba(0,0,0,0.06) !important;
+    border-color: #00ff41 !important;
+    box-shadow: 0 0 0 2px rgba(0,255,65,0.07) !important;
     outline: none !important;
 }
+#url-box textarea::placeholder, #url-box input::placeholder {
+    color: #1a3d1a !important;
+}
 #url-box label span {
-    font-size: 11px !important;
-    font-weight: 600 !important;
-    color: #aaa !important;
-    letter-spacing: 0.08em !important;
+    font-size: 10px !important;
+    font-weight: 400 !important;
+    color: #1e4d1e !important;
+    letter-spacing: 0.14em !important;
     text-transform: uppercase !important;
 }
 
 /* ── Button ── */
 #analyze-btn {
-    background: #111 !important;
-    color: #fff !important;
-    border: none !important;
-    border-radius: 8px !important;
-    font-family: 'Inter', sans-serif !important;
-    font-size: 14px !important;
-    font-weight: 500 !important;
+    background: transparent !important;
+    color: #00ff41 !important;
+    border: 1px solid #00ff41 !important;
+    border-radius: 4px !important;
+    font-family: 'Share Tech Mono', monospace !important;
+    font-size: 13px !important;
+    font-weight: 400 !important;
+    letter-spacing: 0.14em !important;
     padding: 12px 0 !important;
-    transition: background 0.15s, transform 0.1s !important;
-    letter-spacing: 0.01em !important;
+    transition: background 0.15s, box-shadow 0.15s, transform 0.1s !important;
 }
 #analyze-btn:hover {
-    background: #333 !important;
+    background: rgba(0,255,65,0.05) !important;
+    box-shadow: 0 0 14px rgba(0,255,65,0.12) !important;
     transform: translateY(-1px) !important;
 }
 #analyze-btn:active {
@@ -286,77 +261,95 @@ footer { display: none !important; }
 /* ── Examples ── */
 .examples-holder table td button,
 .gr-samples-table td button {
-    font-family: 'JetBrains Mono', monospace !important;
+    font-family: 'Share Tech Mono', monospace !important;
     font-size: 11px !important;
-    background: #fff !important;
-    border: 1px solid #e8e8e8 !important;
-    border-radius: 6px !important;
-    color: #555 !important;
+    background: transparent !important;
+    border: 1px solid #1c1c1c !important;
+    border-radius: 3px !important;
+    color: #2a5c2a !important;
     padding: 4px 10px !important;
     transition: all 0.12s !important;
 }
 .examples-holder table td button:hover,
 .gr-samples-table td button:hover {
-    background: #f5f5f5 !important;
-    border-color: #ccc !important;
-    color: #111 !important;
+    border-color: #00ff41 !important;
+    color: #00ff41 !important;
+    background: rgba(0,255,65,0.04) !important;
 }
 
 /* ── Result placeholder ── */
 .result-placeholder {
-    border: 1px dashed #e0e0e0;
-    border-radius: 10px;
+    border: 1px solid #111;
+    border-radius: 4px;
     padding: 48px 24px;
     text-align: center;
-    color: #ccc;
-    font-family: 'JetBrains Mono', monospace;
+    color: #1a3d1a;
     font-size: 12px;
+    letter-spacing: 0.1em;
+    background: #0d0d0d;
 }
 
 /* ── Accordion ── */
 .gradio-accordion {
-    background: #fff !important;
-    border: 1px solid #efefef !important;
-    border-radius: 10px !important;
+    background: #0d0d0d !important;
+    border: 1px solid #151515 !important;
+    border-radius: 4px !important;
     overflow: hidden !important;
 }
 .gradio-accordion > .label-wrap button {
-    font-family: 'Inter', sans-serif !important;
-    font-size: 13px !important;
-    font-weight: 500 !important;
-    color: #555 !important;
+    font-family: 'Share Tech Mono', monospace !important;
+    font-size: 11px !important;
+    font-weight: 400 !important;
+    color: #2a5c2a !important;
+    letter-spacing: 0.1em !important;
     padding: 13px 18px !important;
 }
 
 /* ── Dataframe ── */
 .gr-dataframe table {
-    font-family: 'JetBrains Mono', monospace !important;
+    font-family: 'Share Tech Mono', monospace !important;
     font-size: 12px !important;
+    background: #0d0d0d !important;
 }
 .gr-dataframe th {
-    background: #fafafa !important;
-    color: #999 !important;
-    font-weight: 500 !important;
-    font-size: 11px !important;
-    letter-spacing: 0.06em !important;
+    background: #0d0d0d !important;
+    color: #2a5c2a !important;
+    font-weight: 400 !important;
+    font-size: 10px !important;
+    letter-spacing: 0.1em !important;
     text-transform: uppercase !important;
     padding: 8px 16px !important;
-    border-bottom: 1px solid #f0f0f0 !important;
+    border-bottom: 1px solid #151515 !important;
 }
 .gr-dataframe td {
-    padding: 7px 16px !important;
-    color: #333 !important;
-    border-bottom: 1px solid #f9f9f9 !important;
+    padding: 6px 16px !important;
+    color: #00cc35 !important;
+    border-bottom: 1px solid #0f0f0f !important;
 }
 
 /* ── Footer ── */
 .ph-footer {
     text-align: center;
-    padding: 28px 0 36px;
-    font-size: 11px;
-    color: #ccc;
-    letter-spacing: 0.06em;
-    font-family: 'JetBrains Mono', monospace;
+    padding: 24px 0 36px;
+    font-size: 10px;
+    color: #1a3d1a;
+    letter-spacing: 0.1em;
+}
+
+/* ── Scanline overlay ── */
+.gradio-container::before {
+    content: '';
+    position: fixed;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: repeating-linear-gradient(
+        0deg,
+        transparent,
+        transparent 2px,
+        rgba(0,0,0,0.04) 2px,
+        rgba(0,0,0,0.04) 4px
+    );
+    pointer-events: none;
+    z-index: 9999;
 }
 """
 
@@ -364,9 +357,9 @@ footer { display: none !important; }
 
 HEADER = """
 <div class="ph-header">
-    <div class="ph-tag">Deep Learning · NLP · ENSA Fès</div>
-    <h1 class="ph-title">Phishing URL Detector</h1>
-    <p class="ph-sub">BiLSTM + Self-Attention + Structural Features</p>
+    <div class="ph-prompt">root@phishguard:~$ ./scan --model hybrid_bilstm --init</div>
+    <h1 class="ph-title">PHISHING URL DETECTOR</h1>
+    <p class="ph-sub">BiLSTM + Self-Attention + Structural Features // ENSA Fès 2026</p>
 </div>
 """
 
@@ -393,13 +386,13 @@ STATS = """
 
 PLACEHOLDER = """
 <div class="result-placeholder">
-    Enter a URL and click Analyze
+    &gt; awaiting target URL...
 </div>
 """
 
 FOOTER = """
 <div class="ph-footer">
-    PhishTank · Tranco Top 1M · Hybrid BiLSTM + Dense Fusion · ENSA Fès 2026
+    [ PhishTank · Tranco Top 1M · Hybrid BiLSTM + Dense Fusion · ENSA Fès 2026 ]
 </div>
 """
 
@@ -422,7 +415,7 @@ with gr.Blocks(title="Phishing Detector", css=CSS) as demo:
     with gr.Row(equal_height=False):
 
         with gr.Column(scale=5, min_width=320):
-            gr.HTML('<span class="section-label">URL to analyze</span>')
+            gr.HTML('<span class="section-label">&gt; target URL</span>')
             url_input = gr.Textbox(
                 label="",
                 placeholder="https://example.com/path?query=value",
@@ -431,7 +424,7 @@ with gr.Blocks(title="Phishing Detector", css=CSS) as demo:
                 show_label=False,
             )
             analyze_btn = gr.Button(
-                "Analyze →",
+                "[ RUN SCAN ]",
                 variant="primary",
                 elem_id="analyze-btn",
                 size="lg",
@@ -439,15 +432,15 @@ with gr.Blocks(title="Phishing Detector", css=CSS) as demo:
             gr.Examples(
                 examples=EXAMPLES,
                 inputs=url_input,
-                label="Quick examples",
+                label="// quick examples",
                 elem_id="examples-holder",
             )
 
         with gr.Column(scale=5, min_width=320):
-            gr.HTML('<span class="section-label">Detection result</span>')
+            gr.HTML('<span class="section-label">&gt; scan output</span>')
             result_out = gr.HTML(value=PLACEHOLDER)
 
-    with gr.Accordion("18 structural signals extracted from the URL", open=False):
+    with gr.Accordion("// 18 structural signals extracted from URL", open=False):
         feat_table = gr.Dataframe(
             headers=["Feature", "Value"],
             label="",
