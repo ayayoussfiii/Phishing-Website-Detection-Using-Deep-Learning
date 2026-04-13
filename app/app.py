@@ -39,7 +39,7 @@ def predict_url(url: str):
         return _error_html(load_error), None
 
     if not url or len(url.strip()) < 5:
-        return _error_html("ERR :: please enter a valid URL."), None
+        return _error_html("Please enter a valid URL."), None
 
     url = url.strip()
     if not url.startswith(("http://", "https://")):
@@ -51,55 +51,77 @@ def predict_url(url: str):
     pct = int(prob * 100)
 
     if prob < 0.3:
-        status  = "SAFE"
-        verdict = "Target URL is clean. No threat detected."
-        color   = "#00ff41"
-        prefix  = "[OK]"
+        status    = "Safe"
+        verdict   = "No threat detected. This URL appears legitimate."
+        tag_color = "#166534"
+        tag_bg    = "#dcfce7"
+        bar_color = "#22c55e"
+        icon      = """<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#166534" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><polyline points="9 12 11 14 15 10"/></svg>"""
     elif prob < 0.7:
-        status  = "SUSPICIOUS"
-        verdict = "Anomalous patterns detected. Proceed with caution."
-        color   = "#ffb700"
-        prefix  = "[!!]"
+        status    = "Suspicious"
+        verdict   = "Unusual patterns detected. Proceed with caution."
+        tag_color = "#92400e"
+        tag_bg    = "#fef3c7"
+        bar_color = "#f59e0b"
+        icon      = """<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#92400e" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>"""
     else:
-        status  = "PHISHING"
-        verdict = "THREAT CONFIRMED. Do not visit this URL."
-        color   = "#ff3131"
-        prefix  = "[XX]"
-
-    bar_filled = int(pct / 5)
-    bar_empty  = 20 - bar_filled
-    bar        = "█" * bar_filled + "░" * bar_empty
+        status    = "Phishing"
+        verdict   = "High risk — this URL is likely malicious. Do not visit."
+        tag_color = "#991b1b"
+        tag_bg    = "#fee2e2"
+        bar_color = "#ef4444"
+        icon      = """<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#991b1b" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/></svg>"""
 
     result_html = f"""
-<div style="
-  font-family:'Courier New',Courier,monospace;
-  background:#0a0a0a;
-  border:1px solid #1a1a1a;
-  border-left:3px solid {color};
-  border-radius:4px;
-  padding:20px 22px;
-  color:#00ff41;
-  font-size:13px;
-  line-height:1.8;
-">
-  <div style="color:#333; margin-bottom:14px; font-size:11px; letter-spacing:0.08em;">
-    ┌─ PHISHGUARD SCAN RESULT ────────────────────────────────
+<div style="font-family:'Geist','Inter',system-ui,sans-serif;">
+
+  <!-- Status badge row -->
+  <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:20px;">
+    <div style="display:flex; align-items:center; gap:8px;">
+      <span style="
+        display:inline-flex; align-items:center; gap:6px;
+        background:{tag_bg}; color:{tag_color};
+        font-size:12px; font-weight:600;
+        padding:5px 12px; border-radius:6px;
+        letter-spacing:0.01em;
+      ">{icon} {status}</span>
+    </div>
+    <span style="font-size:12px; color:#94a3b8; font-weight:500;">{pct}% risk score</span>
   </div>
-  <div style="margin-bottom:10px;">
-    <span style="color:#2a5c2a;">STATUS  </span>
-    <span style="color:{color}; letter-spacing:0.12em;">{prefix} {status}</span>
+
+  <!-- Risk bar -->
+  <div style="margin-bottom:20px;">
+    <div style="display:flex; justify-content:space-between; margin-bottom:6px;">
+      <span style="font-size:11px; font-weight:500; color:#64748b; letter-spacing:0.05em; text-transform:uppercase;">Risk level</span>
+      <span style="font-size:11px; font-weight:600; color:#1e293b;">{pct} / 100</span>
+    </div>
+    <div style="background:#f1f5f9; border-radius:99px; height:6px; overflow:hidden;">
+      <div style="width:{pct}%; height:100%; background:{bar_color}; border-radius:99px; transition:width 0.4s ease;"></div>
+    </div>
   </div>
-  <div style="margin-bottom:10px;">
-    <span style="color:#2a5c2a;">RISK    </span>
-    <span style="color:{color};">{bar}  {pct}%</span>
+
+  <!-- URL row -->
+  <div style="
+    background:#f8fafc;
+    border:1px solid #e2e8f0;
+    border-radius:8px;
+    padding:10px 14px;
+    margin-bottom:16px;
+    display:flex; align-items:center; gap:10px;
+  ">
+    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#94a3b8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 007.54.54l3-3a5 5 0 00-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 00-7.54-.54l-3 3a5 5 0 007.07 7.07l1.71-1.71"/></svg>
+    <span style="font-family:'JetBrains Mono','Fira Code',monospace; font-size:11px; color:#475569; word-break:break-all;">{url}</span>
   </div>
-  <div style="margin-bottom:14px; word-break:break-all;">
-    <span style="color:#2a5c2a;">TARGET  </span>
-    <span style="color:#555;">{url}</span>
+
+  <!-- Verdict -->
+  <div style="
+    display:flex; align-items:flex-start; gap:10px;
+    background:#f8fafc; border-radius:8px; padding:12px 14px;
+    border-left:3px solid {bar_color};
+  ">
+    <span style="font-size:12px; color:#64748b; line-height:1.6;">{verdict}</span>
   </div>
-  <div style="border-top:1px solid #1a1a1a; padding-top:12px; color:#3a7a3a; font-size:11px;">
-    &gt; {verdict}
-  </div>
+
 </div>
 """
 
@@ -115,143 +137,193 @@ def predict_url(url: str):
 def _error_html(msg: str) -> str:
     return f"""
 <div style="
-  font-family:'Courier New',Courier,monospace;
-  background:#0a0a0a;
-  border:1px solid #1a1a1a;
-  border-left:3px solid #ff3131;
-  border-radius:4px;
-  padding:16px 22px;
-  color:#ff3131;
-  font-size:13px;
-">[ERR] {msg}</div>"""
+  font-family:'Geist','Inter',system-ui,sans-serif;
+  display:flex; align-items:center; gap:10px;
+  background:#fef2f2; border:1px solid #fecaca;
+  border-radius:8px; padding:12px 16px;
+  font-size:13px; color:#991b1b;
+"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#991b1b" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/></svg>
+{msg}</div>"""
 
 
 # ── CSS ────────────────────────────────────────────────────────────────────────
 
 CSS = """
-@import url('https://fonts.googleapis.com/css2?family=Share+Tech+Mono&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap');
 
 *, *::before, *::after { box-sizing: border-box; }
 
 body, .gradio-container {
-    background: #080808 !important;
-    font-family: 'Share Tech Mono', 'Courier New', monospace !important;
-    color: #00ff41 !important;
+    background: #f8fafc !important;
+    font-family: 'Inter', system-ui, sans-serif !important;
+    color: #0f172a !important;
+    min-height: 100vh;
 }
 
 footer { display: none !important; }
+.gr-block.gr-box { box-shadow: none !important; }
 
-/* ── Header ── */
-.ph-header {
-    padding: 36px 0 30px;
-    text-align: center;
-    border-bottom: 1px solid #111;
-    margin-bottom: 0;
+/* ── Topbar ── */
+.ph-topbar {
+    background: #ffffff;
+    border-bottom: 1px solid #e2e8f0;
+    padding: 0 32px;
+    display: flex;
+    align-items: center;
+    height: 56px;
+    gap: 12px;
+    margin-bottom: 28px;
 }
-.ph-prompt {
+.ph-logo-dot {
+    width: 28px; height: 28px;
+    background: #6366f1;
+    border-radius: 7px;
+    display: flex; align-items: center; justify-content: center;
+}
+.ph-logo-name {
+    font-size: 15px;
+    font-weight: 600;
+    color: #0f172a;
+    letter-spacing: -0.2px;
+}
+.ph-logo-version {
     font-size: 11px;
-    color: #2a5c2a;
-    letter-spacing: 0.1em;
-    margin-bottom: 16px;
+    background: #f1f5f9;
+    color: #64748b;
+    border: 1px solid #e2e8f0;
+    border-radius: 4px;
+    padding: 2px 7px;
+    margin-left: 4px;
+    font-family: 'JetBrains Mono', monospace;
 }
-.ph-title {
-    font-size: 28px;
-    font-weight: 400;
-    color: #00ff41;
-    margin: 0 0 8px;
-    letter-spacing: 0.08em;
-    text-shadow: 0 0 20px rgba(0,255,65,0.2);
-}
-.ph-sub {
+.ph-topbar-right {
+    margin-left: auto;
     font-size: 11px;
-    color: #1e4d1e;
-    letter-spacing: 0.12em;
+    color: #94a3b8;
+    font-family: 'JetBrains Mono', monospace;
+    letter-spacing: 0.05em;
+}
+
+/* ── Page title ── */
+.ph-page-title {
+    padding: 0 32px 20px;
+}
+.ph-page-title h2 {
+    font-size: 20px;
+    font-weight: 600;
+    color: #0f172a;
+    margin: 0 0 4px;
+    letter-spacing: -0.3px;
+}
+.ph-page-title p {
+    font-size: 13px;
+    color: #64748b;
     margin: 0;
 }
 
-/* ── Stats ── */
+/* ── Stat cards ── */
 .ph-stats {
-    display: flex;
-    justify-content: center;
-    border-bottom: 1px solid #111;
-    background: #080808;
-    margin-bottom: 32px;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 12px;
+    padding: 0 32px 24px;
 }
-.ph-stat {
-    padding: 14px 40px;
-    text-align: center;
-    border-right: 1px solid #111;
+.ph-stat-card {
+    background: #ffffff;
+    border: 1px solid #e2e8f0;
+    border-radius: 10px;
+    padding: 16px 18px;
 }
-.ph-stat:last-child { border-right: none; }
-.ph-stat-val {
-    display: block;
-    font-size: 18px;
-    color: #00ff41;
-    text-shadow: 0 0 10px rgba(0,255,65,0.25);
-}
-.ph-stat-lbl {
-    display: block;
-    font-size: 10px;
-    color: #1e4d1e;
-    letter-spacing: 0.1em;
+.ph-stat-label {
+    font-size: 11px;
+    font-weight: 500;
+    color: #94a3b8;
     text-transform: uppercase;
-    margin-top: 2px;
+    letter-spacing: 0.07em;
+    margin-bottom: 6px;
+}
+.ph-stat-value {
+    font-size: 22px;
+    font-weight: 700;
+    color: #0f172a;
+    letter-spacing: -0.5px;
+    line-height: 1;
+}
+.ph-stat-sub {
+    font-size: 11px;
+    color: #94a3b8;
+    margin-top: 4px;
 }
 
-/* ── Section labels ── */
-.section-label {
-    font-size: 10px;
-    letter-spacing: 0.14em;
+/* ── Main content area ── */
+.ph-content {
+    padding: 0 32px;
+}
+
+/* ── Cards ── */
+.ph-card {
+    background: #ffffff !important;
+    border: 1px solid #e2e8f0 !important;
+    border-radius: 10px !important;
+    padding: 20px !important;
+    box-shadow: none !important;
+}
+
+/* ── Card headers ── */
+.ph-card-header {
+    font-size: 12px;
+    font-weight: 600;
+    color: #64748b;
     text-transform: uppercase;
-    color: #1e4d1e;
-    margin-bottom: 8px;
-    display: block;
+    letter-spacing: 0.07em;
+    margin-bottom: 14px;
+    padding-bottom: 12px;
+    border-bottom: 1px solid #f1f5f9;
+    display: flex;
+    align-items: center;
+    gap: 7px;
 }
 
 /* ── Input ── */
 #url-box textarea, #url-box input {
-    font-family: 'Share Tech Mono', 'Courier New', monospace !important;
+    font-family: 'JetBrains Mono', monospace !important;
     font-size: 13px !important;
-    background: #0d0d0d !important;
-    border: 1px solid #1c1c1c !important;
-    border-radius: 4px !important;
-    color: #00ff41 !important;
-    padding: 12px 14px !important;
-    caret-color: #00ff41 !important;
+    background: #f8fafc !important;
+    border: 1px solid #e2e8f0 !important;
+    border-radius: 8px !important;
+    color: #0f172a !important;
+    padding: 11px 14px !important;
     transition: border-color 0.15s, box-shadow 0.15s;
 }
 #url-box textarea:focus, #url-box input:focus {
-    border-color: #00ff41 !important;
-    box-shadow: 0 0 0 2px rgba(0,255,65,0.07) !important;
+    border-color: #6366f1 !important;
+    background: #ffffff !important;
+    box-shadow: 0 0 0 3px rgba(99,102,241,0.1) !important;
     outline: none !important;
 }
 #url-box textarea::placeholder, #url-box input::placeholder {
-    color: #1a3d1a !important;
+    color: #cbd5e1 !important;
 }
 #url-box label span {
-    font-size: 10px !important;
-    font-weight: 400 !important;
-    color: #1e4d1e !important;
-    letter-spacing: 0.14em !important;
-    text-transform: uppercase !important;
+    display: none !important;
 }
 
 /* ── Button ── */
 #analyze-btn {
-    background: transparent !important;
-    color: #00ff41 !important;
-    border: 1px solid #00ff41 !important;
-    border-radius: 4px !important;
-    font-family: 'Share Tech Mono', monospace !important;
+    background: #6366f1 !important;
+    color: #ffffff !important;
+    border: none !important;
+    border-radius: 8px !important;
+    font-family: 'Inter', sans-serif !important;
     font-size: 13px !important;
-    font-weight: 400 !important;
-    letter-spacing: 0.14em !important;
-    padding: 12px 0 !important;
-    transition: background 0.15s, box-shadow 0.15s, transform 0.1s !important;
+    font-weight: 600 !important;
+    letter-spacing: 0.01em !important;
+    padding: 11px 0 !important;
+    transition: background 0.15s, transform 0.1s, box-shadow 0.15s !important;
 }
 #analyze-btn:hover {
-    background: rgba(0,255,65,0.05) !important;
-    box-shadow: 0 0 14px rgba(0,255,65,0.12) !important;
+    background: #4f46e5 !important;
+    box-shadow: 0 4px 14px rgba(99,102,241,0.3) !important;
     transform: translateY(-1px) !important;
 }
 #analyze-btn:active {
@@ -259,140 +331,198 @@ footer { display: none !important; }
 }
 
 /* ── Examples ── */
+.examples-holder .label-wrap,
+.gr-samples-table .label-wrap { display: none !important; }
+
+.examples-holder table,
+.gr-samples-table table {
+    border-collapse: separate !important;
+    border-spacing: 4px !important;
+}
 .examples-holder table td button,
 .gr-samples-table td button {
-    font-family: 'Share Tech Mono', monospace !important;
+    font-family: 'JetBrains Mono', monospace !important;
     font-size: 11px !important;
-    background: transparent !important;
-    border: 1px solid #1c1c1c !important;
-    border-radius: 3px !important;
-    color: #2a5c2a !important;
-    padding: 4px 10px !important;
+    background: #f8fafc !important;
+    border: 1px solid #e2e8f0 !important;
+    border-radius: 6px !important;
+    color: #475569 !important;
+    padding: 5px 10px !important;
     transition: all 0.12s !important;
+    white-space: nowrap;
 }
 .examples-holder table td button:hover,
 .gr-samples-table td button:hover {
-    border-color: #00ff41 !important;
-    color: #00ff41 !important;
-    background: rgba(0,255,65,0.04) !important;
+    background: #ede9fe !important;
+    border-color: #a5b4fc !important;
+    color: #4f46e5 !important;
 }
 
 /* ── Result placeholder ── */
 .result-placeholder {
-    border: 1px solid #111;
-    border-radius: 4px;
-    padding: 48px 24px;
+    border: 1.5px dashed #e2e8f0;
+    border-radius: 10px;
+    padding: 52px 24px;
     text-align: center;
-    color: #1a3d1a;
+    color: #cbd5e1;
     font-size: 12px;
-    letter-spacing: 0.1em;
-    background: #0d0d0d;
+    letter-spacing: 0.04em;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
 }
 
 /* ── Accordion ── */
 .gradio-accordion {
-    background: #0d0d0d !important;
-    border: 1px solid #151515 !important;
-    border-radius: 4px !important;
+    background: #ffffff !important;
+    border: 1px solid #e2e8f0 !important;
+    border-radius: 10px !important;
     overflow: hidden !important;
+    margin-top: 0 !important;
 }
 .gradio-accordion > .label-wrap button {
-    font-family: 'Share Tech Mono', monospace !important;
-    font-size: 11px !important;
-    font-weight: 400 !important;
-    color: #2a5c2a !important;
-    letter-spacing: 0.1em !important;
-    padding: 13px 18px !important;
+    font-family: 'Inter', sans-serif !important;
+    font-size: 12px !important;
+    font-weight: 600 !important;
+    color: #64748b !important;
+    letter-spacing: 0.04em !important;
+    padding: 14px 20px !important;
+    text-transform: uppercase !important;
 }
 
 /* ── Dataframe ── */
+.gr-dataframe { border: none !important; }
 .gr-dataframe table {
-    font-family: 'Share Tech Mono', monospace !important;
+    font-family: 'JetBrains Mono', monospace !important;
     font-size: 12px !important;
-    background: #0d0d0d !important;
+    width: 100% !important;
+    border-collapse: collapse !important;
 }
 .gr-dataframe th {
-    background: #0d0d0d !important;
-    color: #2a5c2a !important;
-    font-weight: 400 !important;
-    font-size: 10px !important;
-    letter-spacing: 0.1em !important;
+    background: #f8fafc !important;
+    color: #94a3b8 !important;
+    font-weight: 500 !important;
+    font-size: 11px !important;
+    letter-spacing: 0.07em !important;
     text-transform: uppercase !important;
-    padding: 8px 16px !important;
-    border-bottom: 1px solid #151515 !important;
+    padding: 9px 18px !important;
+    border-bottom: 1px solid #e2e8f0 !important;
+    text-align: left !important;
 }
 .gr-dataframe td {
-    padding: 6px 16px !important;
-    color: #00cc35 !important;
-    border-bottom: 1px solid #0f0f0f !important;
+    padding: 7px 18px !important;
+    color: #334155 !important;
+    border-bottom: 1px solid #f1f5f9 !important;
+}
+.gr-dataframe tr:last-child td { border-bottom: none !important; }
+.gr-dataframe tr:hover td { background: #f8fafc !important; }
+
+/* ── Section wrapper padding ── */
+.section-wrap {
+    padding: 0 32px;
+    margin-top: 16px;
 }
 
 /* ── Footer ── */
 .ph-footer {
     text-align: center;
     padding: 24px 0 36px;
-    font-size: 10px;
-    color: #1a3d1a;
-    letter-spacing: 0.1em;
+    font-size: 11px;
+    color: #cbd5e1;
+    letter-spacing: 0.05em;
+    border-top: 1px solid #f1f5f9;
+    margin-top: 28px;
 }
 
-/* ── Scanline overlay ── */
-.gradio-container::before {
-    content: '';
-    position: fixed;
-    top: 0; left: 0; right: 0; bottom: 0;
-    background: repeating-linear-gradient(
-        0deg,
-        transparent,
-        transparent 2px,
-        rgba(0,0,0,0.04) 2px,
-        rgba(0,0,0,0.04) 4px
-    );
-    pointer-events: none;
-    z-index: 9999;
+/* ── Divider ── */
+.ph-divider {
+    height: 1px;
+    background: #f1f5f9;
+    margin: 0 32px 24px;
 }
+
+/* ── Row padding override ── */
+.gradio-row { padding: 0 32px !important; gap: 16px !important; }
 """
 
 # ── HTML blocks ───────────────────────────────────────────────────────────────
 
-HEADER = """
-<div class="ph-header">
-    <div class="ph-prompt">root@phishguard:~$ ./scan --model hybrid_bilstm --init</div>
-    <h1 class="ph-title">PHISHING URL DETECTOR</h1>
-    <p class="ph-sub">BiLSTM + Self-Attention + Structural Features // ENSA Fès 2026</p>
+TOPBAR = """
+<div class="ph-topbar">
+    <div class="ph-logo-dot">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+        </svg>
+    </div>
+    <span class="ph-logo-name">PhishGuard</span>
+    <span class="ph-logo-version">v2.0</span>
+    <div class="ph-topbar-right">BiLSTM · Self-Attention · ENSA Fès 2026</div>
+</div>
+"""
+
+PAGE_TITLE = """
+<div class="ph-page-title">
+    <h2>URL Scanner</h2>
+    <p>Analyze any URL for phishing threats using deep learning.</p>
 </div>
 """
 
 STATS = """
 <div class="ph-stats">
-    <div class="ph-stat">
-        <span class="ph-stat-val">99.6%</span>
-        <span class="ph-stat-lbl">Accuracy</span>
+    <div class="ph-stat-card">
+        <div class="ph-stat-label">Accuracy</div>
+        <div class="ph-stat-value">99.6%</div>
+        <div class="ph-stat-sub">On test set</div>
     </div>
-    <div class="ph-stat">
-        <span class="ph-stat-val">0.999</span>
-        <span class="ph-stat-lbl">AUC-ROC</span>
+    <div class="ph-stat-card">
+        <div class="ph-stat-label">AUC-ROC</div>
+        <div class="ph-stat-value">0.999</div>
+        <div class="ph-stat-sub">Near-perfect</div>
     </div>
-    <div class="ph-stat">
-        <span class="ph-stat-val">100k</span>
-        <span class="ph-stat-lbl">URLs trained</span>
+    <div class="ph-stat-card">
+        <div class="ph-stat-label">Training data</div>
+        <div class="ph-stat-value">100k</div>
+        <div class="ph-stat-sub">URLs labeled</div>
     </div>
-    <div class="ph-stat">
-        <span class="ph-stat-val">18</span>
-        <span class="ph-stat-lbl">Features</span>
+    <div class="ph-stat-card">
+        <div class="ph-stat-label">Features</div>
+        <div class="ph-stat-value">18</div>
+        <div class="ph-stat-sub">Structural signals</div>
     </div>
+</div>
+"""
+
+INPUT_HEADER = """
+<div class="ph-card-header">
+    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#94a3b8" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+    Scan target
+</div>
+"""
+
+RESULT_HEADER = """
+<div class="ph-card-header">
+    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#94a3b8" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+    Detection result
 </div>
 """
 
 PLACEHOLDER = """
 <div class="result-placeholder">
-    &gt; awaiting target URL...
+    <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#e2e8f0" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+    </svg>
+    <span>Enter a URL above and click Analyze</span>
 </div>
+"""
+
+EXAMPLES_LABEL = """
+<div style="font-size:11px; font-weight:600; color:#94a3b8; text-transform:uppercase; letter-spacing:0.07em; margin:14px 0 8px;">Quick examples</div>
 """
 
 FOOTER = """
 <div class="ph-footer">
-    [ PhishTank · Tranco Top 1M · Hybrid BiLSTM + Dense Fusion · ENSA Fès 2026 ]
+    PhishTank · Tranco Top 1M &nbsp;·&nbsp; Hybrid BiLSTM + Dense Fusion &nbsp;·&nbsp; ENSA Fès 2026
 </div>
 """
 
@@ -407,45 +537,55 @@ EXAMPLES = [
 
 # ── Layout ────────────────────────────────────────────────────────────────────
 
-with gr.Blocks(title="Phishing Detector", css=CSS) as demo:
+with gr.Blocks(title="PhishGuard", css=CSS) as demo:
 
-    gr.HTML(HEADER)
+    gr.HTML(TOPBAR)
+    gr.HTML(PAGE_TITLE)
     gr.HTML(STATS)
+    gr.HTML('<div class="ph-divider"></div>')
 
     with gr.Row(equal_height=False):
 
+        # Left — input card
         with gr.Column(scale=5, min_width=320):
-            gr.HTML('<span class="section-label">&gt; target URL</span>')
-            url_input = gr.Textbox(
-                label="",
-                placeholder="https://example.com/path?query=value",
-                elem_id="url-box",
-                lines=1,
-                show_label=False,
-            )
-            analyze_btn = gr.Button(
-                "[ RUN SCAN ]",
-                variant="primary",
-                elem_id="analyze-btn",
-                size="lg",
-            )
-            gr.Examples(
-                examples=EXAMPLES,
-                inputs=url_input,
-                label="// quick examples",
-                elem_id="examples-holder",
-            )
+            with gr.Group(elem_classes="ph-card"):
+                gr.HTML(INPUT_HEADER)
+                url_input = gr.Textbox(
+                    label="",
+                    placeholder="https://example.com/path?query=value",
+                    elem_id="url-box",
+                    lines=1,
+                    show_label=False,
+                )
+                analyze_btn = gr.Button(
+                    "Analyze URL",
+                    variant="primary",
+                    elem_id="analyze-btn",
+                    size="lg",
+                )
+                gr.HTML(EXAMPLES_LABEL)
+                gr.Examples(
+                    examples=EXAMPLES,
+                    inputs=url_input,
+                    label="",
+                    elem_id="examples-holder",
+                )
 
+        # Right — result card
         with gr.Column(scale=5, min_width=320):
-            gr.HTML('<span class="section-label">&gt; scan output</span>')
-            result_out = gr.HTML(value=PLACEHOLDER)
+            with gr.Group(elem_classes="ph-card"):
+                gr.HTML(RESULT_HEADER)
+                result_out = gr.HTML(value=PLACEHOLDER)
 
-    with gr.Accordion("// 18 structural signals extracted from URL", open=False):
-        feat_table = gr.Dataframe(
-            headers=["Feature", "Value"],
-            label="",
-            wrap=False,
-        )
+    # Features accordion
+    with gr.Row():
+        with gr.Column():
+            with gr.Accordion("18 structural signals extracted from the URL", open=False):
+                feat_table = gr.Dataframe(
+                    headers=["Feature", "Value"],
+                    label="",
+                    wrap=False,
+                )
 
     gr.HTML(FOOTER)
 
