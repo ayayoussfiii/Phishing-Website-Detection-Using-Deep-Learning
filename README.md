@@ -1,4 +1,4 @@
-# 🎣 Phishing Detection — Hybrid Deep Learning
+#  Phishing Detection — Hybrid Deep Learning
 
 > BiLSTM + Self-Attention · Features structurelles · PhishTank + Alexa  
 > **ENSA de Fès** — Module Deep Learning & NLP
