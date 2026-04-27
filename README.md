@@ -97,6 +97,9 @@ python app.py runserver
 
 <img width="896" height="503" alt="image" src="https://github.com/user-attachments/assets/f9816a64-9b75-4b77-84c7-43807a54ee81" />
 <img width="898" height="503" alt="image" src="https://github.com/user-attachments/assets/a8625d93-850a-4b8e-a17d-a000e0887a95" />
+<img width="881" height="431" alt="image" src="https://github.com/user-attachments/assets/f9e3c8ff-cb6c-48cb-8379-7703165252fa" />
+<img width="881" height="469" alt="image" src="https://github.com/user-attachments/assets/12c5e1fb-260f-41e7-afb4-79690728c579" />
+
 
 
 
