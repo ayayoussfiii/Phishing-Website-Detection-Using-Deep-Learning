@@ -1,4 +1,4 @@
-# 🛡️ PhishGuard Pro — Détection de Phishing par Deep Learning & Agents IA
+#  PhishGuard Pro — Détection de Phishing par Deep Learning & Agents IA
 
 > **Architecture Multi-Agent** — BiLSTM + Self-Attention · 18 Features structurelles · LLM Local (Ollama) · Rapport GRC  
 > **ENSA de Fès** — Module Deep Learning & NLP — Projet de Fin d'Études 2026
