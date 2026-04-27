@@ -62,14 +62,14 @@
 │
 ▼
 ┌───────────────────────────────────────┐
-│ 🤖 LLM LOCAL (Ollama) │
+│  LLM LOCAL (Ollama) │
 │ cybersecuritythreatanalysis (8B) │
-│ 🔒 100% local - Aucune API externe │
+│  100% local - Aucune API externe │
 └───────────────────────────────────────┘
 │
 ▼
 ┌───────────────────────────────────────┐
-│ 📊 RAPPORT GRC FINAL │
+│  RAPPORT GRC FINAL │
 │ • Governance (NIST/ISO 27001) │
 │ • Risk Assessment │
 │ • Compliance Status │
