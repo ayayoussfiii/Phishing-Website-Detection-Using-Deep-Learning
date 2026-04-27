@@ -85,7 +85,7 @@ python app.py runserver
 
 ---
 
-## 🛠️ Technologies
+##  Technologies
 
 - TensorFlow
 - Django
