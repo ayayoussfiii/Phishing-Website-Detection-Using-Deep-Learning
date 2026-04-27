@@ -15,7 +15,7 @@ from datetime import datetime, timezone
 from dataclasses import dataclass, field
 from typing import Optional
 
-OLLAMA_MODEL = "ALIENTELLIGENCE/cybersecuritythreatanalysisv2"
+OLLAMA_MODEL = "ALIENTELLIGENCE/cybersecuritythreatanalysis"
 
 try:
     import ollama as _ollama
