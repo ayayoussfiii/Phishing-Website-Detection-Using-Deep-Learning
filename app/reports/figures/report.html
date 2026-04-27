@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PhishGuard Pro — Rapport de Performance</title>
+<style>
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body { background:#f1f5f9; color:#0f172a; font-family:'Segoe UI', Arial, sans-serif; }
+  header { background:linear-gradient(135deg,#1e3a5f,#0f172a); padding:40px; text-align:center; border-bottom:3px solid #3b82f6; }
+  h1 { font-size:2.5rem; background:linear-gradient(135deg,#60a5fa,#a78bfa,#67e8f9); -webkit-background-clip:text; -webkit-text-fill-color:transparent; }
+  .subtitle { color:#94a3b8; margin-top:8px; font-size:0.9rem; }
+  .metrics-strip { display:flex; justify-content:center; gap:40px; padding:24px 20px; background:white; border-bottom:1px solid #e2e8f0; flex-wrap:wrap; }
+  .metric { text-align:center; }
+  .metric-value { font-size:1.8rem; font-weight:bold; }
+  .metric-label { font-size:0.75rem; color:#64748b; margin-top:4px; }
+  .grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(650px,1fr)); gap:24px; padding:32px; }
+  .card { background:white; border-radius:12px; border:1px solid #e2e8f0; overflow:hidden; transition:transform 0.2s, box-shadow 0.2s; }
+  .card:hover { transform:translateY(-4px); box-shadow:0 10px 25px -5px rgba(0,0,0,0.1); border-color:#3b82f6; }
+  .card-title { padding:16px 20px; font-size:1rem; font-weight:bold; color:#2563eb; border-bottom:1px solid #e2e8f0; background:#f8fafc; }
+  .card img { width:100%; display:block; }
+  .agent-badge { display:inline-block; background:#e0e7ff; color:#1e40af; padding:2px 8px; border-radius:12px; font-size:0.7rem; margin-left:8px; }
+  footer { text-align:center; padding:24px; color:#64748b; font-size:0.8rem; border-top:1px solid #e2e8f0; background:white; }
+  @media print {
+    body { background:white; }
+    .card { break-inside:avoid; page-break-inside:avoid; }
+    .metrics-strip { background:white; }
+    .card:hover { transform:none; box-shadow:none; }
+  }
+</style>
+</head>
+<body>
+<header>
+  <div style="font-size:3rem;">🛡️</div>
+  <h1>PHISHGUARD PRO</h1>
+  <div class="subtitle">Rapport de Performance du Modèle — Hybrid BiLSTM + Self-Attention</div>
+  <div class="subtitle">Architecture Multi-Agent (Scanner + Detective + Judge) avec LLM Local</div>
+  <div class="subtitle">ENSA Fès — Projet deep Learning SofiaAya</div>
+</header>
+<div class="metrics-strip">
+  <div class="metric"><div class="metric-value" style="color:#16a34a">99.6%</div><div class="metric-label">Accuracy</div></div>
+  <div class="metric"><div class="metric-value" style="color:#0891b2">0.999</div><div class="metric-label">AUC-ROC</div></div>
+  <div class="metric"><div class="metric-value" style="color:#7c3aed">0.990</div><div class="metric-label">F1-Score</div></div>
+  <div class="metric"><div class="metric-value" style="color:#2563eb">0.991</div><div class="metric-label">Precision</div></div>
+  <div class="metric"><div class="metric-value" style="color:#d97706">0.989</div><div class="metric-label">Recall</div></div>
+  <div class="metric"><div class="metric-value" style="color:#dc2626">8B</div><div class="metric-label">LLM Local (Ollama)</div></div>
+</div>
+<div class="grid">
+        <div class="card">
+            <div class="card-title">Courbes d'Entraînement</div>
+            <img src="01_training_curves.png" alt="Courbes d'Entraînement" loading="lazy">
+        </div>
+        <div class="card">
+            <div class="card-title">ROC & Precision-Recall</div>
+            <img src="02_roc_pr_curves.png" alt="ROC & Precision-Recall" loading="lazy">
+        </div>
+        <div class="card">
+            <div class="card-title">Matrice de Confusion</div>
+            <img src="03_confusion_matrix.png" alt="Matrice de Confusion" loading="lazy">
+        </div>
+        <div class="card">
+            <div class="card-title">Distribution des Scores</div>
+            <img src="04_score_distribution.png" alt="Distribution des Scores" loading="lazy">
+        </div>
+        <div class="card">
+            <div class="card-title">Architecture du Modèle (BiLSTM)</div>
+            <img src="05_model_architecture.png" alt="Architecture du Modèle (BiLSTM)" loading="lazy">
+        </div>
+        <div class="card">
+            <div class="card-title">Ablation Study</div>
+            <img src="06_ablation_study.png" alt="Ablation Study" loading="lazy">
+        </div>
+        <div class="card">
+            <div class="card-title">Feature Importance</div>
+            <img src="07_feature_importance.png" alt="Feature Importance" loading="lazy">
+        </div>
+        <div class="card">
+            <div class="card-title">Dashboard Résumé</div>
+            <img src="08_summary_dashboard.png" alt="Dashboard Résumé" loading="lazy">
+        </div>
+        <div class="card">
+            <div class="card-title">Architecture Multi-Agent (3 Agents)</div>
+            <img src="09_multi_agent_architecture.png" alt="Architecture Multi-Agent (3 Agents)" loading="lazy">
+        </div>
+        <div class="card">
+            <div class="card-title">Workflow des 3 Agents</div>
+            <img src="10_agents_workflow.png" alt="Workflow des 3 Agents" loading="lazy">
+        </div></div>
+<footer>
+  Rapport généré automatiquement par PhishGuard Pro · 27/04/2026 à 12:47<br>
+  Modèle : Hybrid BiLSTM + Self-Attention (99.6% accuracy) · Judge Agent avec LLM local (cybersecuritythreatanalysis)<br>
+  Architecture : 3 Agents (Scanner → Detective → Judge) orchestrés par CrewAI
+</footer>
+</body>
+</html>
