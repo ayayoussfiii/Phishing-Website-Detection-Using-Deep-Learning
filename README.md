@@ -5,7 +5,7 @@
 
 ---
 
-## 📋 Table of Contents
+##  Table of Contents
 1. [Overview](#overview)
 2. [Multi-Agent Architecture](#multi-agent-architecture)
 3. [Model Architecture](#model-architecture)
