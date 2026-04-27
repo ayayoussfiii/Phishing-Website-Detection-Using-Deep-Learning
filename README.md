@@ -111,6 +111,19 @@ python app.py runserver
 
 ## Interface web 
 <img width="918" height="500" alt="image" src="https://github.com/user-attachments/assets/0b0a6751-976e-4ecc-9a58-ba229e4502d5" />
+<img width="880" height="487" alt="image" src="https://github.com/user-attachments/assets/5b19f8b5-4416-406b-874a-fc50641bbed9" />
+<img width="877" height="316" alt="image" src="https://github.com/user-attachments/assets/4a6e03e5-388f-4e78-9029-4de83dd6a2d8" />
+
+## Rapport GRC 
+<img width="808" height="436" alt="image" src="https://github.com/user-attachments/assets/fc8f4611-336f-457e-a767-053fa8355194" />
+<img width="842" height="400" alt="image" src="https://github.com/user-attachments/assets/c5f73d1c-1119-4df0-b8f1-f42e471cc865" />
+<img width="831" height="489" alt="image" src="https://github.com/user-attachments/assets/07d81587-d20f-47dc-be14-c91dc2fb7595" />
+<img width="829" height="328" alt="image" src="https://github.com/user-attachments/assets/f088c20d-b660-4145-a9e5-ccb4865b5485" />
+<img width="899" height="428" alt="image" src="https://github.com/user-attachments/assets/f3823cb2-4dfa-4150-acd3-b0f3ce392421" />
+
+
+
+
 
 
 
