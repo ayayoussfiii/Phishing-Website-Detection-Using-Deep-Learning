@@ -109,6 +109,8 @@ python app.py runserver
 <img width="464" height="401" alt="image" src="https://github.com/user-attachments/assets/ba81d273-3dee-4c9c-a8c8-a72cb5fdaed2" />
 <img width="469" height="402" alt="image" src="https://github.com/user-attachments/assets/c23c71b3-c1a6-48eb-9e3e-1385e4632784" />
 
+## Interface web 
+<img width="918" height="500" alt="image" src="https://github.com/user-attachments/assets/0b0a6751-976e-4ecc-9a58-ba229e4502d5" />
 
 
 
